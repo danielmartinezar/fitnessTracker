@@ -106,9 +106,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   ],
                 ),
               ),
-              ListView(
+              Expanded(
+                  child: ListView(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
+                physics: AlwaysScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 children: [
                   Align(
@@ -577,7 +579,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     ),
                   ),
                 ],
-              ),
+              )),
             ],
           ),
         ),
