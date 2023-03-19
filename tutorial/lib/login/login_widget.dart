@@ -169,7 +169,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                             fontSize: 14.0,
                             fontWeight: FontWeight.normal,
                           ),
-                      maxLines: null,
                       validator: _model.emailAddressControllerValidator
                           .asValidator(context),
                     ),
@@ -265,7 +264,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                             fontSize: 14.0,
                             fontWeight: FontWeight.normal,
                           ),
-                      maxLines: null,
                       validator: _model.passwordLoginControllerValidator
                           .asValidator(context),
                     ),
