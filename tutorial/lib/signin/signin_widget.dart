@@ -26,7 +26,6 @@ class _SigninWidgetState extends State<SigninWidget> {
   late SigninModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   void initState() {
     super.initState();
@@ -419,14 +418,45 @@ class _SigninWidgetState extends State<SigninWidget> {
                 String pasw = _model.passwordController.text;
                 String pasw1 = _model.confirmPasswordController.text;
                 String usr = _model.emailAddressController.text;
-                if (signincontroller.validatepasw(usr,pasw, pasw1)){
+                if (signincontroller.validatepasw(usr,pasw, pasw1) && pasw.isNotEmpty && usr.isNotEmpty){
                   log(signincontroller.usr());
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text("Cuenta creada"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context), // passing false
+                            child: Text('ok'),
+                          )
+                        ]
+                      );
+                    },
+                  );
                   await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginWidget(),
-                  ),
-                );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginWidget(),
+                    ),
+                  );
+                }else{
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text("Error al crear la cuenta, verificar los datos e intente nuevamente"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context), // passing false
+                            child: Text('ok'),
+                          )
+                        ]
+                      );
+                    },
+                  );
+
+                  
                 }; 
               },
               text: 'Create Account',

@@ -37,10 +37,6 @@ class SigninModel extends FlutterFlowModel {
     confirmPasswordController?.dispose();
   }
 
-
-
-
-
   /// Additional helper methods are added here.
 
 }

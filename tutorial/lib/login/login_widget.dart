@@ -1,7 +1,12 @@
+import 'dart:developer';
+
+import 'package:tutorial/signin/signin_controller.dart';
+
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/main.dart';
+import 'package:get/get.dart';
 import '/signin/signin_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -22,11 +27,14 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+  final usc = Get.find<signin_controller>();
+  
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => LoginModel());
+    
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {});
@@ -273,13 +281,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      await Navigator.push(
+                      log(usc.user.value + usc.pas.value);
+                      /* await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
                               NavBarPage(initialPage: 'HomePage'),
                         ),
-                      );
+                      ); */
                     },
                     text: 'Login',
                     options: FFButtonOptions(
