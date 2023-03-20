@@ -1,12 +1,15 @@
 import 'dart:developer';
 
+import 'package:tutorial/home_page/home_page_widget.dart';
+import 'package:tutorial/login/login_controller.dart';
 import 'package:tutorial/signin/signin_controller.dart';
+import 'package:get/get.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/main.dart';
-import 'package:get/get.dart';
+
 import '/signin/signin_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -24,10 +27,12 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   late LoginModel _model;
+  
+  final login_controller logincontroller = Get.put(login_controller());
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-  final usc = Get.find<signin_controller>();
+  late signin_controller usc = Get.find<signin_controller>();
   
 
   @override
@@ -281,14 +286,46 @@ class _LoginWidgetState extends State<LoginWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      log(usc.user.value + usc.pas.value);
-                      /* await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              NavBarPage(initialPage: 'HomePage'),
-                        ),
-                      ); */
+                      String pasw = _model.passwordLoginController.text;
+                      String usr = _model.emailAddressController.text;
+                      if (logincontroller.validateusr(usr,pasw, usc.user.value, usc.pas.value) && pasw.isNotEmpty && usr.isNotEmpty){
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Text("Sesion iniciada correctamente"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context), // passing false
+                                  child: Text('ok'),
+                                )
+                              ]
+                            );
+                          },
+                        );
+                        log("acceso consedido");
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePageWidget(),
+                          ),
+                        );
+                      }else{
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Text("Error al inicir sesion,verificar los datos e intente nuevamente"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context), // passing false
+                                  child: Text('ok'),
+                                )
+                              ]
+                            );
+                          },
+                        );
+                      }
                     },
                     text: 'Login',
                     options: FFButtonOptions(
@@ -352,6 +389,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                         builder: (context) => SigninWidget(),
                       ),
                     );
+                    /* await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                NavBarPage(initialPage: 'Singin'),
+                          ),
+                        ); */
                   },
                   text: 'Don\'t have an  account? Sing up',
                   options: FFButtonOptions(
