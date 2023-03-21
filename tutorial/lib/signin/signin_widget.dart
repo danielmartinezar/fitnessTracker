@@ -1,3 +1,7 @@
+import 'package:tutorial/signin/signin_controller.dart';
+import 'package:get/get.dart';
+import 'dart:developer';
+
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -17,10 +21,12 @@ class SigninWidget extends StatefulWidget {
 }
 
 class _SigninWidgetState extends State<SigninWidget> {
+  final signin_controller signincontroller = Get.put(signin_controller());
+
   late SigninModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
+  
   @override
   void initState() {
     super.initState();
@@ -217,7 +223,6 @@ class _SigninWidgetState extends State<SigninWidget> {
                       fontSize: 14.0,
                       fontWeight: FontWeight.normal,
                     ),
-                maxLines: null,
                 validator:
                     _model.emailAddressControllerValidator.asValidator(context),
               ),
@@ -310,7 +315,6 @@ class _SigninWidgetState extends State<SigninWidget> {
                       fontSize: 14.0,
                       fontWeight: FontWeight.normal,
                     ),
-                maxLines: null,
                 validator:
                     _model.passwordControllerValidator.asValidator(context),
               ),
@@ -403,7 +407,6 @@ class _SigninWidgetState extends State<SigninWidget> {
                       fontSize: 14.0,
                       fontWeight: FontWeight.normal,
                     ),
-                maxLines: null,
                 validator: _model.confirmPasswordControllerValidator
                     .asValidator(context),
               ),
@@ -412,13 +415,50 @@ class _SigninWidgetState extends State<SigninWidget> {
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
             child: FFButtonWidget(
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginWidget(),
-                  ),
-                );
+              onPressed: () async{
+                String pasw = _model.passwordController.text;
+                String pasw1 = _model.confirmPasswordController.text;
+                String usr = _model.emailAddressController.text;
+                if (signincontroller.validatepasw(usr,pasw, pasw1) && pasw.isNotEmpty && usr.isNotEmpty){
+                  log(signincontroller.usr());
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text("Cuenta creada"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context), // passing false
+                            child: Text('ok'),
+                          )
+                        ]
+                      );
+                    },
+                  );
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginWidget(),
+                    ),
+                  );
+                }else{
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text("Error al crear la cuenta, verificar los datos e intente nuevamente"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context), // passing false
+                            child: Text('ok'),
+                          )
+                        ]
+                      );
+                    },
+                  );
+
+                  
+                }; 
               },
               text: 'Create Account',
               options: FFButtonOptions(

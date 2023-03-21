@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 class SigninModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
+
+
   // State field(s) for emailAddress widget.
   TextEditingController? emailAddressController;
   String? Function(BuildContext, String?)? emailAddressControllerValidator;
