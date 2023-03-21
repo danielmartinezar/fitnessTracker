@@ -1,11 +1,12 @@
+import 'package:get/get.dart';
+import 'package:tutorial/current_activity/domain/use_case/controller/location_controller.dart';
+
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/main.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'current_activity_model.dart';
 export 'current_activity_model.dart';
 
@@ -38,6 +39,8 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
 
   @override
   Widget build(BuildContext context) {
+    LocationController locationController = Get.put(LocationController());
+    locationController.suscribeLocationUpdates();
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -215,7 +218,12 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                     children: [
                       FFButtonWidget(
                         onPressed: () {
-                          print('Button pressed ...');
+                          print("touched!!");
+                          print(
+                              "The location is paused? ${locationController.isPaused}");
+                          locationController.isPaused
+                              ? locationController.resumeLocationUpdates()
+                              : locationController.pauseLocationUpdates();
                         },
                         text: 'Pause',
                         options: FFButtonOptions(
@@ -225,7 +233,7 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                               0.0, 0.0, 0.0, 0.0),
                           iconPadding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 0.0, 0.0),
-                          color: Color(0x004B39EF),
+                          color: Color.fromARGB(255, 255, 255, 255),
                           textStyle:
                               FlutterFlowTheme.of(context).subtitle2.override(
                                     fontFamily: 'Poppins',
@@ -240,13 +248,16 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                       ),
                       FFButtonWidget(
                         onPressed: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NavBarPage(initialPage: 'HomePage'),
-                            ),
-                          );
+                          print(
+                              "Tamañoo ${locationController.allPositions.length}");
+                          // locationController.unSuscribeLocationUpdates();
+                          // await Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) =>
+                          //         NavBarPage(initialPage: 'HomePage'),
+                          //   ),
+                          // );
                         },
                         text: 'Finish',
                         options: FFButtonOptions(
