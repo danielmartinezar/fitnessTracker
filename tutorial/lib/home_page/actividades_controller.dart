@@ -9,17 +9,17 @@ class ActividadesController extends GetxController {
       cronometro: Duration(minutes: 45),
       km: 5.0,
       kcal: 400,
-      avgPace: Duration(minutes: 9, seconds: 0),
+      avgPace: 8.5,
       estado: true,
       fecha: DateTime(2023, 3, 5),
       puntos: [],
     ),
     Actividad(
-      tipo: 'Bicycle',
+      tipo: 'Cycling',
       cronometro: Duration(hours: 1, minutes: 30),
       km: 20.0,
       kcal: 800,
-      avgPace: Duration(minutes: 4, seconds: 30),
+      avgPace: 8.2,
       estado: false,
       fecha: DateTime(2023, 3, 10),
       puntos: [],
@@ -30,8 +30,8 @@ class ActividadesController extends GetxController {
       {required String tipo,
       required Duration cronometro,
       required double km,
-      required int kcal,
-      required Duration avgPace,
+      required double kcal,
+      required double avgPace,
       required bool estado,
       required DateTime fecha,
       required List<UserLocation> puntos}) {
@@ -44,6 +44,7 @@ class ActividadesController extends GetxController {
         estado: estado,
         fecha: fecha,
         puntos: puntos));
+    print("Vistoooooooo desde actividad $km");
   }
 
   void eliminarActividad(Actividad actividad) {

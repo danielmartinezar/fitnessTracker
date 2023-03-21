@@ -11,11 +11,16 @@ class LocatorService {
   Geolocator geolocator = Geolocator();
   Stream<UserLocation> get stream => _locationController.stream;
 
+  final LocationSettings locationSettings = LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 2,
+  );
   Future<void> startStream() async {
     LocationPermission permission = await Geolocator.requestPermission();
     logInfo("startStream with Locator library");
     _positionStreamSubscription =
-        Geolocator.getPositionStream().handleError((onError) {
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .handleError((onError) {
       logError("Got error from Geolocator stream");
       return Future.error(onError.toString());
     }).listen((event) {
@@ -46,5 +51,25 @@ class LocatorService {
     } else {
       logError("stopStream _positionStreamSubscription is null");
     }
+  }
+
+  Future<double> getDistance(
+      double latA, double longA, double latB, double longB) async {
+    double distanceBetweenPoints =
+        await Geolocator.distanceBetween(latA, longA, latB, longB);
+    return distanceBetweenPoints;
+  }
+
+  double calculateAvgPace(double duration, double distance) {
+    final avgPace = duration / distance;
+    return avgPace;
+  }
+
+  double calculateKCal(double weight, double distance) {
+    double factor = 0.75 + (0.25 * 6);
+    // Convertir segundos a horas
+    double caloriesPerKilometer = weight * factor;
+    double caloriesBurned = caloriesPerKilometer * distance;
+    return caloriesBurned;
   }
 }

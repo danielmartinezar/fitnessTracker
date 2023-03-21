@@ -4,8 +4,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/new_segment/new_segment_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'activity_detail_model.dart';
 export 'activity_detail_model.dart';
 import 'package:tutorial/home_page/actividad.dart';
@@ -158,7 +156,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '${widget.actividad.cronometro}',
+                                      '${widget.actividad.cronometro.inHours}:${widget.actividad.cronometro.inMinutes}:${widget.actividad.cronometro.inSeconds}',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                     ),
@@ -176,7 +174,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '${widget.actividad.km}km',
+                                      '${widget.actividad.km.toStringAsFixed(2)} km',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                     ),
@@ -201,7 +199,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '${widget.actividad.avgPace}',
+                                      '${widget.actividad.avgPace.toStringAsFixed(2)}',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                     ),
@@ -219,7 +217,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '${widget.actividad.kcal}Kcal',
+                                      '${widget.actividad.kcal.toStringAsFixed(1)}Kcal',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                     ),

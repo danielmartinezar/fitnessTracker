@@ -6,8 +6,8 @@ class Actividad {
       tipo; // El tipo de actividad (e.g. correr, caminar, andar en bicicleta)
   Duration cronometro; // El tiempo que duró la actividad
   double km; // La distancia recorrida en kilómetros
-  int kcal; // La cantidad de calorías quemadas durante la actividad
-  Duration avgPace; // El ritmo promedio por kilómetro
+  double kcal; // La cantidad de calorías quemadas durante la actividad
+  double avgPace; // El ritmo promedio por kilómetro
   bool estado; // Indica si la actividad está activa o no
   DateTime fecha; // La fecha en que se realizó la actividad
   List<UserLocation> puntos; // Una lista de valores de tipo double
