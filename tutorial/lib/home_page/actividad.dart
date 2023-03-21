@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tutorial/current_activity/model/user_location.dart';
 
 class Actividad {
   String
@@ -9,7 +10,7 @@ class Actividad {
   Duration avgPace; // El ritmo promedio por kilómetro
   bool estado; // Indica si la actividad está activa o no
   DateTime fecha; // La fecha en que se realizó la actividad
-  List<double> puntos; // Una lista de valores de tipo double
+  List<UserLocation> puntos; // Una lista de valores de tipo double
 
   Actividad({
     required this.tipo,

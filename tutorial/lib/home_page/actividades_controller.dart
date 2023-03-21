@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:tutorial/home_page/actividad.dart';
+import 'package:tutorial/current_activity/model/user_location.dart';
 
 class ActividadesController extends GetxController {
   var actividades = <Actividad>[
@@ -11,7 +12,7 @@ class ActividadesController extends GetxController {
       avgPace: Duration(minutes: 9, seconds: 0),
       estado: true,
       fecha: DateTime(2023, 3, 5),
-      puntos: [1.0, 2.5, 3.7, 4.2],
+      puntos: [],
     ),
     Actividad(
       tipo: 'Bicycle',
@@ -21,7 +22,7 @@ class ActividadesController extends GetxController {
       avgPace: Duration(minutes: 4, seconds: 30),
       estado: false,
       fecha: DateTime(2023, 3, 10),
-      puntos: [1.0, 2.5, 3.7, 4.2],
+      puntos: [],
     ),
   ].obs;
 
@@ -33,7 +34,7 @@ class ActividadesController extends GetxController {
       required Duration avgPace,
       required bool estado,
       required DateTime fecha,
-      required List<double> puntos}) {
+      required List<UserLocation> puntos}) {
     actividades.add(Actividad(
         tipo: tipo,
         cronometro: cronometro,
