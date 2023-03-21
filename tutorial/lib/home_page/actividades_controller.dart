@@ -4,33 +4,45 @@ import 'package:tutorial/home_page/actividad.dart';
 class ActividadesController extends GetxController {
   var actividades = <Actividad>[
     Actividad(
-      tipo: 'caminar',
-      cronometro: Duration(minutes: 30),
-      km: 2.5,
-      kcal: 200,
-      avgPace: Duration(minutes: 12, seconds: 30),
-      estado: true,
-    ),
-    Actividad(
-      tipo: 'correr',
+      tipo: 'Running',
       cronometro: Duration(minutes: 45),
       km: 5.0,
       kcal: 400,
       avgPace: Duration(minutes: 9, seconds: 0),
       estado: true,
+      fecha: DateTime(2023, 3, 5),
+      puntos: [1.0, 2.5, 3.7, 4.2],
     ),
     Actividad(
-      tipo: 'andar en bicicleta',
+      tipo: 'Bicycle',
       cronometro: Duration(hours: 1, minutes: 30),
       km: 20.0,
       kcal: 800,
       avgPace: Duration(minutes: 4, seconds: 30),
       estado: false,
+      fecha: DateTime(2023, 3, 10),
+      puntos: [1.0, 2.5, 3.7, 4.2],
     ),
   ].obs;
 
-  void agregarActividad(Actividad actividad) {
-    actividades.add(actividad);
+  void agregarActividad(
+      {required String tipo,
+      required Duration cronometro,
+      required double km,
+      required int kcal,
+      required Duration avgPace,
+      required bool estado,
+      required DateTime fecha,
+      required List<double> puntos}) {
+    actividades.add(Actividad(
+        tipo: tipo,
+        cronometro: cronometro,
+        km: km,
+        kcal: kcal,
+        avgPace: avgPace,
+        estado: estado,
+        fecha: fecha,
+        puntos: puntos));
   }
 
   void eliminarActividad(Actividad actividad) {

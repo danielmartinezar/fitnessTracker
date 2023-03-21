@@ -8,9 +8,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'activity_detail_model.dart';
 export 'activity_detail_model.dart';
+import 'package:tutorial/home_page/actividad.dart';
 
 class ActivityDetailWidget extends StatefulWidget {
-  const ActivityDetailWidget({Key? key}) : super(key: key);
+  final Actividad actividad;
+  const ActivityDetailWidget({Key? key, required this.actividad})
+      : super(key: key);
 
   @override
   _ActivityDetailWidgetState createState() => _ActivityDetailWidgetState();
@@ -60,7 +63,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
           },
         ),
         title: Text(
-          'Running',
+          '${widget.actividad.tipo}',
           style: FlutterFlowTheme.of(context).title2.override(
                 fontFamily: 'Poppins',
                 color: Colors.black,
@@ -155,7 +158,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '02:30:12',
+                                    '${widget.actividad.cronometro}',
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
                                   ),
@@ -173,7 +176,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '10,50km',
+                                    '${widget.actividad.km}km',
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
                                   ),
@@ -198,7 +201,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '07:59',
+                                    '${widget.actividad.avgPace}',
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
                                   ),
@@ -216,7 +219,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '250Kcal',
+                                    '${widget.actividad.kcal}Kcal',
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
                                   ),

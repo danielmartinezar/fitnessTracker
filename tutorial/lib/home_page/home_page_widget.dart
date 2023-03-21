@@ -4,9 +4,13 @@ import '/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:tutorial/home_page/actividad.dart';
+import 'package:tutorial/home_page/actividades_controller.dart';
+import 'package:tutorial/current_activity/current_activity_widget.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';
-import "package:tutorial/current_activity/current_activity_widget.dart";
+import 'package:tutorial/activity_detail/activity_detail_widget.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
@@ -25,6 +29,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HomePageModel());
+    Get.put(ActividadesController()); // 2. Inicializa el controlador
   }
 
   @override
@@ -37,6 +42,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final actividadesController =
+        Get.find<ActividadesController>(); // Obtiene el controlador
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Color(0xFFF1F4F8),
@@ -45,11 +53,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           _mostrarAlerta(context);
         },
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        elevation: 10.0,
+        elevation: 10,
         child: Icon(
           Icons.add,
           color: Color(0xFF254A7A),
-          size: 28.0,
+          size: 28,
         ),
       ),
       appBar: AppBar(
@@ -61,13 +69,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           style: FlutterFlowTheme.of(context).title2.override(
                 fontFamily: 'Poppins',
                 color: Colors.black,
-                fontSize: 22.0,
+                fontSize: 22,
                 fontWeight: FontWeight.w600,
               ),
         ),
         actions: [],
         centerTitle: true,
-        elevation: 2.0,
+        elevation: 2,
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -78,7 +86,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(30.0, 10.0, 0.0, 0.0),
+                padding: EdgeInsetsDirectional.fromSTEB(30, 10, 0, 0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -87,19 +95,18 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Poppins',
                             color: FlutterFlowTheme.of(context).primaryText,
-                            fontSize: 20.0,
+                            fontSize: 20,
                             fontWeight: FontWeight.normal,
                           ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(2.0, 0.0, 0.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(2, 0, 0, 0),
                       child: Text(
                         'John!',
                         style: FlutterFlowTheme.of(context).bodyText1.override(
                               fontFamily: 'Poppins',
                               color: Color(0xFF254A7A),
-                              fontSize: 20.0,
+                              fontSize: 20,
                               fontWeight: FontWeight.w600,
                             ),
                       ),
@@ -108,521 +115,147 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 ),
               ),
               Expanded(
-                  child: ListView(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                physics: AlwaysScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                children: [
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
-                      child: InkWell(
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NavBarPage(initialPage: 'ActivityDetail'),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 315.0,
-                          height: 124.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(
-                              color: Colors.black,
-                            ),
-                          ),
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional(0.0, 0.0),
-                                child: Text(
-                                  'Running',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(0.8, 0.0),
-                                child: Text(
-                                  '11/10/2023',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.4, 0.0),
-                                child: Text(
-                                  '10.50km',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.9, 0.05),
-                                child: Icon(
-                                  Icons.directions_run,
-                                  color: Color(0xFF254A7A),
-                                  size: 28.0,
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.4, 0.0),
-                                child: Text(
-                                  '02:30:12',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
-                      child: InkWell(
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NavBarPage(initialPage: 'ActivityDetail'),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 315.0,
-                          height: 124.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(
-                              color: Colors.black,
-                            ),
-                          ),
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional(0.0, 0.0),
-                                child: Text(
-                                  'Cycling',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(0.8, 0.0),
-                                child: Text(
-                                  '10/10/2023',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.4, 0.0),
-                                child: Text(
-                                  '20.50km',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.9, 0.05),
-                                child: Icon(
-                                  Icons.directions_bike,
-                                  color: Color(0xFF254A7A),
-                                  size: 28.0,
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.4, 0.0),
-                                child: Text(
-                                  '01:30:12',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
-                      child: InkWell(
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NavBarPage(initialPage: 'ActivityDetail'),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 315.0,
-                          height: 124.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(
-                              color: Colors.black,
-                            ),
-                          ),
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional(0.0, 0.0),
-                                child: Text(
-                                  'Running',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(0.8, 0.0),
-                                child: Text(
-                                  '11/10/2023',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.4, 0.0),
-                                child: Text(
-                                  '10.50km',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.9, 0.05),
-                                child: Icon(
-                                  Icons.directions_run,
-                                  color: Color(0xFF254A7A),
-                                  size: 28.0,
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.4, 0.0),
-                                child: Text(
-                                  '02:30:12',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
-                      child: InkWell(
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NavBarPage(initialPage: 'ActivityDetail'),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 315.0,
-                          height: 124.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(
-                              color: Colors.black,
-                            ),
-                          ),
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional(0.0, 0.0),
-                                child: Text(
-                                  'Cycling',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(0.8, 0.0),
-                                child: Text(
-                                  '10/10/2023',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.4, 0.0),
-                                child: Text(
-                                  '20.50km',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.9, 0.05),
-                                child: Icon(
-                                  Icons.directions_bike,
-                                  color: Color(0xFF254A7A),
-                                  size: 28.0,
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.4, 0.0),
-                                child: Text(
-                                  '01:30:12',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
-                      child: InkWell(
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NavBarPage(initialPage: 'ActivityDetail'),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 315.0,
-                          height: 124.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(
-                              color: Colors.black,
-                            ),
-                          ),
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional(0.0, 0.0),
-                                child: Text(
-                                  'Cycling',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(0.8, 0.0),
-                                child: Text(
-                                  '10/10/2023',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.4, 0.0),
-                                child: Text(
-                                  '20.50km',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.9, 0.05),
-                                child: Icon(
-                                  Icons.directions_bike,
-                                  color: Color(0xFF254A7A),
-                                  size: 28.0,
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-0.4, 0.0),
-                                child: Text(
-                                  '01:30:12',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )),
+                child: ListView.builder(
+                  itemCount: actividadesController.actividades.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final actividad = actividadesController.actividades[index];
+                    return _buildActividadCard(context, actividad);
+                  },
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-void _mostrarAlerta(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text('Elige una opción'),
-        content: Text('¿Quieres trotar o andar en bicicleta?'),
-        actions: <Widget>[
-          TextButton(
-            child: Text('Trotar'),
-            onPressed: () {
-              // Redirigir a la página de trotar
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => CurrentActivityWidget(
-                          tipo: "Trotar",
-                        )),
-              );
-            },
+  void _mostrarAlerta(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Elige una opción'),
+          content: Text('¿Quieres trotar o andar en bicicleta?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Trotar'),
+              onPressed: () {
+                // Redirigir a la página de trotar
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => CurrentActivityWidget(
+                          //tipo: "Trotar",
+                          )),
+                );
+              },
+            ),
+            TextButton(
+              child: Text('Bicicleta'),
+              onPressed: () {
+                // Redirigir a la página de bicicleta
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => CurrentActivityWidget(
+                          //tipo: "Bicicleta",
+                          )),
+                );
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildActividadCard(BuildContext context, Actividad actividad) {
+    return Align(
+      alignment: AlignmentDirectional(0, 0),
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+        child: InkWell(
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ActivityDetailWidget(actividad: actividad),
+              ),
+            );
+          },
+          child: Container(
+            width: 315,
+            height: 124,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: Colors.black,
+              ),
+            ),
+            alignment: AlignmentDirectional(0, 0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: AlignmentDirectional(0, 0),
+                  child: Text(
+                    '${actividad.tipo}',
+                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                ),
+                Align(
+                  alignment: AlignmentDirectional(0.8, 0),
+                  child: Text(
+                    '${actividad.fecha}',
+                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w300,
+                        ),
+                  ),
+                ),
+                Align(
+                  alignment: AlignmentDirectional(-0.4, 0),
+                  child: Text(
+                    '${actividad.km}km',
+                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                ),
+                Align(
+                  alignment: AlignmentDirectional(-0.9, 0.05),
+                  child: Icon(
+                    actividad.tipo == 'Running'
+                        ? Icons.directions_run
+                        : actividad.tipo == 'Bicycle'
+                            ? Icons.directions_bike
+                            : Icons.directions_walk,
+                    color: Color(0xFF254A7A),
+                    size: 28,
+                  ),
+                ),
+                Align(
+                  alignment: AlignmentDirectional(-0.4, 0),
+                  child: Text(
+                    '${actividad.cronometro}',
+                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          TextButton(
-            child: Text('Bicicleta'),
-            onPressed: () {
-              // Redirigir a la página de bicicleta
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => CurrentActivityWidget(
-                          tipo: "Bicicleta",
-                        )),
-              );
-            },
-          )
-        ],
-      );
-    },
-  );
+        ),
+      ),
+    );
+  }
 }
