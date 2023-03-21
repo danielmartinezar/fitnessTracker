@@ -1,5 +1,3 @@
-import 'package:tutorial/home_page/home_page_widget.dart';
-
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -280,7 +278,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HomePageWidget(),
+                          builder: (context) =>
+                              NavBarPage(initialPage: 'HomePage'),
                         ),
                       );
                     },

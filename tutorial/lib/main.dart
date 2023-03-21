@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: _themeMode,
-      home: NavBarPage(),
+      home: LoginWidget(),
     );
   }
 }
