@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';
+import "package:tutorial/current_activity/current_activity_widget.dart";
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
@@ -41,7 +42,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       backgroundColor: Color(0xFFF1F4F8),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print('FloatingActionButton pressed ...');
+          _mostrarAlerta(context);
         },
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         elevation: 10.0,
@@ -586,4 +587,42 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       ),
     );
   }
+}
+
+void _mostrarAlerta(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Elige una opción'),
+        content: Text('¿Quieres trotar o andar en bicicleta?'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Trotar'),
+            onPressed: () {
+              // Redirigir a la página de trotar
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => CurrentActivityWidget(
+                          tipo: "Trotar",
+                        )),
+              );
+            },
+          ),
+          TextButton(
+            child: Text('Bicicleta'),
+            onPressed: () {
+              // Redirigir a la página de bicicleta
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => CurrentActivityWidget(
+                          tipo: "Bicicleta",
+                        )),
+              );
+            },
+          )
+        ],
+      );
+    },
+  );
 }
