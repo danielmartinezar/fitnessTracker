@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:mi_app/actividad.dart';
+import 'package:tutorial/home_page/actividad.dart';
 
 class ActividadesController extends GetxController {
   var actividades = <Actividad>[
