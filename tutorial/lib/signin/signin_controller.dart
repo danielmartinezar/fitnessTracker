@@ -1,16 +1,18 @@
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
+import 'package:tutorial/signin/signin_model.dart';
+import 'package:tutorial/signin/usuarios_model.dart';
 
 class signin_controller extends GetxController{
-  late final RxString user = "".obs , pas= "".obs;
+  late final List<usuario_model> usuarios = <usuario_model>[].obs;
 
   void setuser(us, pasw) => {
-    user.value = us,
-    pas.value = pasw
+    usuarios.add(usuario_model(user: us, pasw: pasw)),
   };
 
   String usr(){
-    return ("usuario: $user contraseña: $pas");
+    final user = usuarios.map((e) => {"usuario : ${e.user},contraseña : ${e.pasw}"});
+    return "$user";
   }
 
   bool validatepasw (usr,pasw, paswver){
@@ -20,6 +22,20 @@ class signin_controller extends GetxController{
     }
     return false;
   }
+
+  bool exist(usr,pasw){
+    try {
+      final usexist = usuarios.singleWhere((element) => element.user == usr);
+      if (usexist.pasw == pasw){
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+    return false;
+  }
+
+  
 
 
 }

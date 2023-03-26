@@ -21,7 +21,7 @@ class SigninWidget extends StatefulWidget {
 }
 
 class _SigninWidgetState extends State<SigninWidget> {
-  final signin_controller signincontroller = Get.put(signin_controller());
+  late signin_controller usc = Get.find<signin_controller>();
 
   late SigninModel _model;
 
@@ -419,8 +419,8 @@ class _SigninWidgetState extends State<SigninWidget> {
                 String pasw = _model.passwordController.text;
                 String pasw1 = _model.confirmPasswordController.text;
                 String usr = _model.emailAddressController.text;
-                if (signincontroller.validatepasw(usr,pasw, pasw1) && pasw.isNotEmpty && usr.isNotEmpty){
-                  log(signincontroller.usr());
+                if (usc.validatepasw(usr,pasw, pasw1) && pasw.isNotEmpty && usr.isNotEmpty){
+                  log(usc.usr());
                   await showDialog(
                     context: context,
                     builder: (context) {

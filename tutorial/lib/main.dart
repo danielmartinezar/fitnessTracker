@@ -88,7 +88,7 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'HomePage': HomePageWidget(),
+      'HomePage': LoginWidget(),
       'ActivityDetail': ActivityDetailWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
