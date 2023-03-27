@@ -57,6 +57,8 @@ class LocatorService {
       double latA, double longA, double latB, double longB) async {
     double distanceBetweenPoints =
         await Geolocator.distanceBetween(latA, longA, latB, longB);
+    // print(
+    // "******Distancia calculada en 2 puntos: ${distanceBetweenPoints / 1000}");
     return distanceBetweenPoints;
   }
 
@@ -66,9 +68,9 @@ class LocatorService {
   }
 
   double calculateKCal(double weight, double distance) {
-    double factor = 0.75 + (0.25 * 6);
+    final double FACTOR = 0.75;
     // Convertir segundos a horas
-    double caloriesPerKilometer = weight * factor;
+    double caloriesPerKilometer = weight * FACTOR;
     double caloriesBurned = caloriesPerKilometer * distance;
     return caloriesBurned;
   }

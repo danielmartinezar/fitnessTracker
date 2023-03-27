@@ -43,8 +43,9 @@ class ActividadesController extends GetxController {
         avgPace: avgPace,
         estado: estado,
         fecha: fecha,
-        puntos: puntos));
-    print("Vistoooooooo desde actividad $km");
+        puntos: List.from(puntos)));
+    puntos
+        .map((e) => print("Puntos de actividad ${e.latitude} ${e.longitude}"));
   }
 
   void eliminarActividad(Actividad actividad) {

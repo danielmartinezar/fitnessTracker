@@ -8,6 +8,7 @@ import '../location_service.dart';
 class LocationController extends GetxController {
   final userLocation = UserLocation(latitude: 0, longitude: 0).obs;
   var _allPositions = <UserLocation>[].obs;
+
   List<UserLocation> get allPositions => _allPositions;
   var errorMsg = "".obs;
   var _liveUpdate = false.obs;
@@ -45,11 +46,13 @@ class LocationController extends GetxController {
             _allPositions.lastOrNull?.longitude != event.longitude) {
           _allPositions.add(UserLocation(
               latitude: event.latitude, longitude: event.longitude));
-          if (_allPositions.length >= 2) calculateDistance();
+          // print(
+          // "------------lat: ${event.latitude} long:${event.longitude}--------");
+          if (_allPositions.length >= 3) calculateDistance();
         } else {
           print("son igualesssssssssss");
         }
-        calculateKcalories();
+
         // calculateAvgPace();
       } catch (e) {
         print("Erroor presentado es $e");
@@ -63,6 +66,7 @@ class LocationController extends GetxController {
     service.stopStream();
     if (_positionStreamSubscription != null) {
       _positionStreamSubscription?.cancel();
+      print("cancedo---------------*--**--------*");
       _distance.value = 0;
     } else {
       logError("Controller _positionStreamSubscription is null");
@@ -92,16 +96,19 @@ class LocationController extends GetxController {
   }
 
   calculateDistance() {
-    for (int i = _indexPositionList.value; i < _allPositions.length - 1; i++) {
-      Future<double> distanceBetweenPoints = service
-          .getDistance(_allPositions[i].latitude, _allPositions[i].longitude,
-              _allPositions[i + 1].latitude, _allPositions[i + 1].longitude)
-          .then(
-              (distanceBetween) => _distance.value += (distanceBetween / 1000));
-
-      _indexPositionList.value = i;
-    }
-    // print("distanciaaa $_distance");
+    int secondLast = _allPositions.indexOf(_allPositions.last) - 1;
+    service
+        .getDistance(
+            _allPositions[secondLast].latitude,
+            _allPositions[secondLast].longitude,
+            _allPositions.last.latitude,
+            _allPositions.last.longitude)
+        .then((distanceBetween) {
+      double distanceKM = distanceBetween / 1000;
+      _distance.value += distanceKM;
+      calculateKcalories(distanceKM);
+      // print("distanciaa es: ${_distance}");
+    });
   }
 
   Duration convertDuration(durationString) {
@@ -118,10 +125,9 @@ class LocationController extends GetxController {
     return duration;
   }
 
-  void calculateKcalories() {
-    double kCalService = service.calculateKCal(90, _distance.value);
+  void calculateKcalories(double distance) {
+    double kCalService = service.calculateKCal(90, distance);
     _kCal.value += kCalService;
-    // print("El valorrrrrrrrr de las calorias es${_kCal.value}");
   }
 
   // void calculateAvgPace() {
