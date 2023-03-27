@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:tutorial/current_activity/domain/use_case/controller/location_controller.dart';
+import 'package:tutorial/home_page/actividades_controller.dart';
+import 'package:tutorial/home_page/home_page_widget.dart';
 
-import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -11,15 +13,16 @@ import 'current_activity_model.dart';
 export 'current_activity_model.dart';
 
 class CurrentActivityWidget extends StatefulWidget {
-  const CurrentActivityWidget({Key? key}) : super(key: key);
+  final String type;
+  CurrentActivityWidget({Key? key, required this.type}) : super(key: key);
 
   @override
   _CurrentActivityWidgetState createState() => _CurrentActivityWidgetState();
 }
 
 class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
+  StopWatchTimer _stopWatchTimer = StopWatchTimer();
   late CurrentActivityModel _model;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
 
@@ -31,6 +34,7 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
 
   @override
   void dispose() {
+    _stopWatchTimer.dispose();
     _model.dispose();
 
     _unfocusNode.dispose();
@@ -40,27 +44,19 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
   @override
   Widget build(BuildContext context) {
     LocationController locationController = Get.put(LocationController());
+    ActividadesController activityController = Get.put(ActividadesController());
+
+    locationController.resetAll();
     locationController.suscribeLocationUpdates();
+    _stopWatchTimer.onStartTimer();
+    var _displayTime;
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
         backgroundColor: Color(0xFFF1F4F8),
         automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30.0,
-          borderWidth: 1.0,
-          buttonSize: 60.0,
-          icon: Icon(
-            Icons.arrow_back,
-            color: FlutterFlowTheme.of(context).primaryText,
-            size: 30.0,
-          ),
-          onPressed: () async {
-            Navigator.pop(context);
-          },
-        ),
+        leading: null,
         title: Text(
           'Activity',
           style: FlutterFlowTheme.of(context).title2.override(
@@ -86,7 +82,7 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 50.0),
                   child: Text(
-                    'Running',
+                    widget.type,
                     style: FlutterFlowTheme.of(context).title3,
                   ),
                 ),
@@ -107,23 +103,39 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                         children: [
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 10.0, 0.0, 0.0),
-                            child: Text(
-                              '00:24:50',
-                              style:
-                                  FlutterFlowTheme.of(context).title1.override(
+                                0.0, 0.0, 0.0, 0.0),
+                            child: StreamBuilder<int>(
+                              stream: _stopWatchTimer.rawTime,
+                              initialData: _stopWatchTimer.rawTime.value,
+                              builder: (context, snapshot) {
+                                final value = snapshot.data;
+                                _displayTime = StopWatchTimer.getDisplayTime(
+                                    value!,
+                                    hours: true);
+
+                                return Text(
+                                  _displayTime,
+                                  style: FlutterFlowTheme.of(context)
+                                      .title1
+                                      .override(
                                         fontFamily: 'Poppins',
-                                        fontSize: 60.0,
+                                        fontSize: 50,
                                       ),
+                                );
+                              },
                             ),
                           ),
-                          Text(
-                            'Time',
-                            style:
-                                FlutterFlowTheme.of(context).bodyText1.override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 18.0,
-                                    ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 0),
+                            child: Text(
+                              'Time',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 18.0,
+                                  ),
+                            ),
                           ),
                         ],
                       ),
@@ -149,13 +161,15 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            '3,50',
-                            style: FlutterFlowTheme.of(context).title2.override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.black,
-                                ),
-                          ),
+                          Obx(() => Text(
+                                "${locationController.getDistance.toStringAsFixed(2)}",
+                                style: FlutterFlowTheme.of(context)
+                                    .title2
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.black,
+                                    ),
+                              )),
                           Text(
                             'Km',
                             style: FlutterFlowTheme.of(context).subtitle2,
@@ -167,15 +181,15 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                               Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    '120',
-                                    style: FlutterFlowTheme.of(context)
-                                        .title2
-                                        .override(
-                                          fontFamily: 'Poppins',
-                                          color: Colors.black,
-                                        ),
-                                  ),
+                                  Obx(() => Text(
+                                        "${locationController.getKcal.toStringAsFixed(1)}",
+                                        style: FlutterFlowTheme.of(context)
+                                            .title2
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              color: Colors.black,
+                                            ),
+                                      )),
                                   Text(
                                     'Kcal',
                                     style:
@@ -221,9 +235,13 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                           print("touched!!");
                           print(
                               "The location is paused? ${locationController.isPaused}");
-                          locationController.isPaused
-                              ? locationController.resumeLocationUpdates()
-                              : locationController.pauseLocationUpdates();
+                          if (locationController.isPaused) {
+                            locationController.resumeLocationUpdates();
+                            _stopWatchTimer.onStartTimer();
+                          } else {
+                            locationController.pauseLocationUpdates();
+                            _stopWatchTimer.onStopTimer();
+                          }
                         },
                         text: 'Pause',
                         options: FFButtonOptions(
@@ -248,16 +266,29 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                       ),
                       FFButtonWidget(
                         onPressed: () async {
-                          print(
-                              "Tamañoo ${locationController.allPositions.length}");
-                          // locationController.unSuscribeLocationUpdates();
-                          // await Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) =>
-                          //         NavBarPage(initialPage: 'HomePage'),
-                          //   ),
-                          // );
+                          _stopWatchTimer.onStopTimer();
+                          final Duration durationT =
+                              locationController.convertDuration(_displayTime);
+                          DateTime date = DateTime.now();
+                          activityController.agregarActividad(
+                              tipo: widget.type,
+                              cronometro: durationT,
+                              km: locationController.getDistance,
+                              kcal: locationController.getKcal,
+                              avgPace: 9.5,
+                              estado: true,
+                              fecha: DateTime(date.year, date.month, date.day),
+                              puntos: locationController.allPositions);
+                          locationController.resetAll();
+                          locationController.unSuscribeLocationUpdates();
+
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  NavBarPage(page: HomePageWidget()),
+                            ),
+                          );
                         },
                         text: 'Finish',
                         options: FFButtonOptions(

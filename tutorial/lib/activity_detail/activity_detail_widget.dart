@@ -1,11 +1,14 @@
-import '/flutter_flow/flutter_flow_google_map.dart';
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_util.dart' as util;
 import '/new_segment/new_segment_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'activity_detail_model.dart';
 export 'activity_detail_model.dart';
 import 'package:tutorial/home_page/actividad.dart';
@@ -20,15 +23,46 @@ class ActivityDetailWidget extends StatefulWidget {
 }
 
 class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
+  late GoogleMapController mapController;
   late ActivityDetailModel _model;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+  late List<LatLng> _polylinePoints = <LatLng>[];
+  late Set<Polyline> _polylines = new Set<Polyline>();
+  late Set<Marker> _markers = new Set<Marker>();
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  createPolylines() {
+    print("entrooooooo");
+    print(
+        "Latitud ${widget.actividad.puntos[0].latitude}, Long ${widget.actividad.puntos[0].longitude}");
+    widget.actividad.puntos.forEach((e) {
+      print("Latitude: ${e.latitude} Longitute: ${e.longitude}");
+      _polylinePoints.add(new LatLng(e.latitude, e.longitude));
+    });
+
+    _polylines.add(Polyline(
+        polylineId: PolylineId("1"),
+        points: _polylinePoints,
+        color: Colors.blue,
+        width: 10));
+    return _polylines;
+  }
+
+  createMarkers() {
+    _markers
+        .add(Marker(markerId: MarkerId("A"), position: _polylinePoints.first));
+    _markers
+        .add(Marker(markerId: MarkerId("B"), position: _polylinePoints.last));
+  }
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ActivityDetailModel());
+    _model = util.createModel(context, () => ActivityDetailModel());
+    createPolylines();
   }
 
   @override
@@ -103,27 +137,20 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                       ),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                      child: FlutterFlowGoogleMap(
-                        controller: _model.googleMapsController,
-                        onCameraIdle: (latLng) =>
-                            _model.googleMapsCenter = latLng,
-                        initialLocation: _model.googleMapsCenter ??=
-                            LatLng(13.106061, -59.613158),
-                        markerColor: GoogleMarkerColor.violet,
-                        mapType: MapType.normal,
-                        style: GoogleMapStyle.standard,
-                        initialZoom: 14,
-                        allowInteraction: true,
-                        allowZoom: true,
-                        showZoomControls: true,
-                        showLocation: true,
-                        showCompass: false,
-                        showMapToolbar: false,
-                        showTraffic: false,
-                        centerMapOnMarkerTap: true,
-                      ),
-                    ),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                              target: _polylinePoints.first, zoom: 18),
+                          onMapCreated: _onMapCreated,
+                          polylines: _polylines,
+                          markers: _markers,
+                          gestureRecognizers:
+                              <Factory<OneSequenceGestureRecognizer>>[
+                            new Factory<OneSequenceGestureRecognizer>(
+                              () => new EagerGestureRecognizer(),
+                            ),
+                          ].toSet(),
+                        )),
                   ),
                 ),
                 Padding(
@@ -158,7 +185,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '${widget.actividad.cronometro}',
+                                      '${widget.actividad.cronometro.inHours}:${widget.actividad.cronometro.inMinutes}:${widget.actividad.cronometro.inSeconds}',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                     ),
@@ -176,7 +203,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '${widget.actividad.km}km',
+                                      '${widget.actividad.km.toStringAsFixed(2)} km',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                     ),
@@ -201,7 +228,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '${widget.actividad.avgPace}',
+                                      '${widget.actividad.avgPace.toStringAsFixed(2)}',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                     ),
@@ -219,7 +246,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '${widget.actividad.kcal}Kcal',
+                                      '${widget.actividad.kcal.toStringAsFixed(1)}Kcal',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                     ),

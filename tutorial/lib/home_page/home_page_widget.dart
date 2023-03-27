@@ -57,7 +57,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         child: Icon(
           Icons.add,
           color: Color(0xFF254A7A),
-          size: 28,
+          size: 42,
         ),
       ),
       appBar: AppBar(
@@ -139,25 +139,25 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           content: Text('¿Quieres trotar o andar en bicicleta?'),
           actions: <Widget>[
             TextButton(
-              child: Text('Trotar'),
+              child: Text('Running'),
               onPressed: () {
                 // Redirigir a la página de trotar
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (context) => CurrentActivityWidget(
-                          //tipo: "Trotar",
+                            type: "Running",
                           )),
                 );
               },
             ),
             TextButton(
-              child: Text('Bicicleta'),
+              child: Text('Cycling'),
               onPressed: () {
                 // Redirigir a la página de bicicleta
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (context) => CurrentActivityWidget(
-                          //tipo: "Bicicleta",
+                            type: "Cycling",
                           )),
                 );
               },
@@ -211,7 +211,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 Align(
                   alignment: AlignmentDirectional(0.8, 0),
                   child: Text(
-                    '${actividad.fecha}',
+                    '${actividad.fecha.day}/${actividad.fecha.month}/${actividad.fecha.year}.',
                     style: FlutterFlowTheme.of(context).bodyText1.override(
                           fontFamily: 'Poppins',
                           fontSize: 12,
@@ -222,7 +222,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 Align(
                   alignment: AlignmentDirectional(-0.4, 0),
                   child: Text(
-                    '${actividad.km}km',
+                    '${actividad.km.toStringAsFixed(2)} km',
                     style: FlutterFlowTheme.of(context).bodyText1.override(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w500,
@@ -234,9 +234,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   child: Icon(
                     actividad.tipo == 'Running'
                         ? Icons.directions_run
-                        : actividad.tipo == 'Bicycle'
+                        : actividad.tipo == 'Cycling'
                             ? Icons.directions_bike
-                            : Icons.directions_walk,
+                            : Icons.directions_run,
                     color: Color(0xFF254A7A),
                     size: 28,
                   ),
@@ -244,7 +244,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 Align(
                   alignment: AlignmentDirectional(-0.4, 0),
                   child: Text(
-                    '${actividad.cronometro}',
+                    '${actividad.cronometro.inHours}:${actividad.cronometro.inMinutes}:${actividad.cronometro.inSeconds}',
                     style: FlutterFlowTheme.of(context).bodyText1.override(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w500,
