@@ -29,10 +29,10 @@ class _LoginWidgetState extends State<LoginWidget> {
   late LoginModel _model;
   
   final login_controller logincontroller = Get.put(login_controller());
+  final signin_controller signincontroller = Get.put(signin_controller());
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-  late signin_controller usc = Get.find<signin_controller>();
   
 
   @override
@@ -288,7 +288,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     onPressed: () async {
                       String pasw = _model.passwordLoginController.text;
                       String usr = _model.emailAddressController.text;
-                      if (logincontroller.validateusr(usr,pasw, usc.user.value, usc.pas.value) && pasw.isNotEmpty && usr.isNotEmpty){
+                      if (pasw.isNotEmpty && usr.isNotEmpty && signincontroller.exist(usr, pasw)){
                         await showDialog(
                           context: context,
                           builder: (context) {
@@ -303,7 +303,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             );
                           },
                         );
-                        log("acceso consedido");
+                        log("acceso concedido");
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
