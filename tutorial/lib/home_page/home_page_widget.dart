@@ -12,6 +12,8 @@ import 'home_page_model.dart';
 export 'home_page_model.dart';
 import 'package:tutorial/activity_detail/activity_detail_widget.dart';
 
+final ActividadesController _actividadesController = Get.find();
+
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
 
@@ -21,7 +23,6 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget> {
   late HomePageModel _model;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
 
@@ -114,15 +115,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   ],
                 ),
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: actividadesController.actividades.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final actividad = actividadesController.actividades[index];
-                    return _buildActividadCard(context, actividad);
-                  },
-                ),
-              ),
+              Expanded(child: _buildActividadesList()),
             ],
           ),
         ),
@@ -168,6 +161,18 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     );
   }
 
+  Widget _buildActividadesList() {
+    return Obx(
+      () => ListView.builder(
+        itemCount: _actividadesController.actividades.length,
+        itemBuilder: (BuildContext context, int index) {
+          final actividad = _actividadesController.actividades[index];
+          return _buildActividadCard(context, actividad);
+        },
+      ),
+    );
+  }
+
   Widget _buildActividadCard(BuildContext context, Actividad actividad) {
     return Align(
       alignment: AlignmentDirectional(0, 0),
@@ -185,7 +190,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           },
           child: Container(
             width: 315,
-            height: 124,
+            height: 140,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
@@ -229,17 +234,31 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         ),
                   ),
                 ),
-                Align(
-                  alignment: AlignmentDirectional(-0.9, 0.05),
-                  child: Icon(
-                    actividad.tipo == 'Running'
-                        ? Icons.directions_run
-                        : actividad.tipo == 'Cycling'
-                            ? Icons.directions_bike
-                            : Icons.directions_run,
-                    color: Color(0xFF254A7A),
-                    size: 28,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Align(
+                      alignment: AlignmentDirectional(-0.9, 0.05),
+                      child: Icon(
+                        actividad.tipo == 'Running'
+                            ? Icons.directions_run
+                            : actividad.tipo == 'Cycling'
+                                ? Icons.directions_bike
+                                : Icons.directions_run,
+                        color: Color(0xFF254A7A),
+                        size: 28,
+                      ),
+                    ),
+                    Align(
+                      alignment: AlignmentDirectional(0.6, 0.05),
+                      child: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          _actividadesController.eliminarActividad(actividad);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 Align(
                   alignment: AlignmentDirectional(-0.4, 0),

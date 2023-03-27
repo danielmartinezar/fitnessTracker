@@ -12,7 +12,16 @@ class ActividadesController extends GetxController {
       avgPace: 8.5,
       estado: true,
       fecha: DateTime(2023, 3, 5),
-      puntos: [],
+      puntos: [
+        UserLocation(
+          latitude: 40.7128,
+          longitude: -74.0060,
+        ),
+        UserLocation(
+          latitude: 40.7129,
+          longitude: -74.0061,
+        ),
+      ],
     ),
     Actividad(
       tipo: 'Cycling',
@@ -22,7 +31,16 @@ class ActividadesController extends GetxController {
       avgPace: 8.2,
       estado: false,
       fecha: DateTime(2023, 3, 10),
-      puntos: [],
+      puntos: [
+        UserLocation(
+          latitude: 40.7128,
+          longitude: -74.0060,
+        ),
+        UserLocation(
+          latitude: 40.7129,
+          longitude: -74.0061,
+        ),
+      ],
     ),
   ].obs;
 
@@ -49,7 +67,8 @@ class ActividadesController extends GetxController {
   }
 
   void eliminarActividad(Actividad actividad) {
-    actividades.remove(actividad);
+    actividades.removeWhere((a) => a == actividad);
+    actividades.refresh();
   }
 
   void modificarActividad(int index, Actividad nuevaActividad) {
