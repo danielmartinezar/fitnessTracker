@@ -4,8 +4,8 @@ import 'package:tutorial/signin/signin_model.dart';
 import 'package:tutorial/signin/usuarios_model.dart';
 
 class signin_controller extends GetxController{
-  late final List<usuario_model> usuarios = <usuario_model>[].obs;
-
+  late final List<usuario_model> usuarios = <usuario_model>[usuario_model(user: "admin@outlook.com", pasw: "adminpasw")].obs;
+  
   void setuser(us, pasw) => {
     usuarios.add(usuario_model(user: us, pasw: pasw)),
   };
@@ -34,8 +34,5 @@ class signin_controller extends GetxController{
     }
     return false;
   }
-
-  
-
 
 }

@@ -61,6 +61,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
@@ -285,6 +286,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
                   child: FFButtonWidget(
+                    key: Key('loginbutton'),
                     onPressed: () async {
                       String pasw = _model.passwordLoginController.text;
                       String usr = _model.emailAddressController.text;
@@ -296,6 +298,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               content: Text("Sesion iniciada correctamente"),
                               actions: [
                                 TextButton(
+                                  key: Key('Textdialog'),
                                   onPressed: () => Navigator.pop(context), // passing false
                                   child: Text('ok'),
                                 )
@@ -382,6 +385,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ),
                 ),
                 FFButtonWidget(
+                  key: Key('signinbutton'),
                   onPressed: () async {
                     await Navigator.push(
                       context,

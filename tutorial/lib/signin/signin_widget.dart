@@ -49,6 +49,7 @@ class _SigninWidgetState extends State<SigninWidget> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Color(0xFFF1F4F8),
+      resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100.0),
         child: AppBar(
@@ -57,14 +58,14 @@ class _SigninWidgetState extends State<SigninWidget> {
           actions: [],
           flexibleSpace: FlexibleSpaceBar(
             title: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 14.0),
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 8.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 8.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -245,6 +246,7 @@ class _SigninWidgetState extends State<SigninWidget> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: TextFormField(
+                key: Key('password'),
                 controller: _model.passwordController,
                 obscureText: !_model.passwordVisibility,
                 decoration: InputDecoration(
@@ -337,6 +339,7 @@ class _SigninWidgetState extends State<SigninWidget> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: TextFormField(
+                key: Key('Confirm Password'),
                 controller: _model.confirmPasswordController,
                 obscureText: !_model.confirmPasswordVisibility,
                 decoration: InputDecoration(
@@ -415,6 +418,7 @@ class _SigninWidgetState extends State<SigninWidget> {
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
             child: FFButtonWidget(
+              key: Key('createbutton'),
               onPressed: () async{
                 String pasw = _model.passwordController.text;
                 String pasw1 = _model.confirmPasswordController.text;
