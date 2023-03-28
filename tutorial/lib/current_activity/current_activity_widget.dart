@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:tutorial/current_activity/domain/use_case/controller/location_controller.dart';
@@ -21,7 +23,7 @@ class CurrentActivityWidget extends StatefulWidget {
 }
 
 class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
-  StopWatchTimer _stopWatchTimer = StopWatchTimer();
+  StopWatchTimer stopWatchTimer = StopWatchTimer();
   late CurrentActivityModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -34,7 +36,7 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
 
   @override
   void dispose() {
-    _stopWatchTimer.dispose();
+    stopWatchTimer.dispose();
     _model.dispose();
 
     _unfocusNode.dispose();
@@ -45,11 +47,10 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
   Widget build(BuildContext context) {
     LocationController locationController = Get.put(LocationController());
     ActividadesController activityController = Get.put(ActividadesController());
-
-    locationController.resetAll();
     locationController.suscribeLocationUpdates();
-    _stopWatchTimer.onStartTimer();
+    stopWatchTimer.onStartTimer();
     var _displayTime;
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -105,13 +106,19 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 0.0, 0.0, 0.0),
                             child: StreamBuilder<int>(
-                              stream: _stopWatchTimer.rawTime,
-                              initialData: _stopWatchTimer.rawTime.value,
+                              stream: stopWatchTimer.rawTime,
+                              initialData: stopWatchTimer.rawTime.value,
                               builder: (context, snapshot) {
                                 final value = snapshot.data;
                                 _displayTime = StopWatchTimer.getDisplayTime(
                                     value!,
                                     hours: true);
+                                Timer.periodic(Duration(minutes: 1), (arg) {
+                                  print("corriendooooooo funcion");
+                                  locationController.calculateAvgPace(
+                                      locationController
+                                          .convertDuration(_displayTime));
+                                });
 
                                 return Text(
                                   _displayTime,
@@ -200,15 +207,15 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                               Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    '120',
-                                    style: FlutterFlowTheme.of(context)
-                                        .title2
-                                        .override(
-                                          fontFamily: 'Poppins',
-                                          color: Colors.black,
-                                        ),
-                                  ),
+                                  Obx(() => Text(
+                                        "${locationController.getAvgPace.toStringAsFixed(1)}",
+                                        style: FlutterFlowTheme.of(context)
+                                            .title2
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              color: Colors.black,
+                                            ),
+                                      )),
                                   Text(
                                     'AVG Pace',
                                     style:
@@ -237,10 +244,10 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                               "The location is paused? ${locationController.isPaused}");
                           if (locationController.isPaused) {
                             locationController.resumeLocationUpdates();
-                            _stopWatchTimer.onStartTimer();
+                            stopWatchTimer.onStartTimer();
                           } else {
                             locationController.pauseLocationUpdates();
-                            _stopWatchTimer.onStopTimer();
+                            stopWatchTimer.onStopTimer();
                           }
                         },
                         text: 'Pause',
@@ -266,7 +273,7 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                       ),
                       FFButtonWidget(
                         onPressed: () async {
-                          _stopWatchTimer.onStopTimer();
+                          stopWatchTimer.onStopTimer();
                           final Duration durationT =
                               locationController.convertDuration(_displayTime);
                           DateTime date = DateTime.now();
@@ -275,7 +282,7 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                               cronometro: durationT,
                               km: locationController.getDistance,
                               kcal: locationController.getKcal,
-                              avgPace: 9.5,
+                              avgPace: locationController.getAvgPace,
                               estado: true,
                               fecha: DateTime(date.year, date.month, date.day),
                               puntos: locationController.allPositions);

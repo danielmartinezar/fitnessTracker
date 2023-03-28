@@ -35,10 +35,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
   }
 
   createPolylines() {
-    print("entrooooooo");
-    print(
-        "Latitud ${widget.actividad.puntos[0].latitude}, Long ${widget.actividad.puntos[0].longitude}");
-    widget.actividad.puntos.forEach((e) {
+    widget.actividad.puntos.skip(1).forEach((e) {
       print("Latitude: ${e.latitude} Longitute: ${e.longitude}");
       _polylinePoints.add(new LatLng(e.latitude, e.longitude));
     });

@@ -8,7 +8,6 @@ import '../location_service.dart';
 class LocationController extends GetxController {
   final userLocation = UserLocation(latitude: 0, longitude: 0).obs;
   var _allPositions = <UserLocation>[].obs;
-
   List<UserLocation> get allPositions => _allPositions;
   var errorMsg = "".obs;
   var _liveUpdate = false.obs;
@@ -40,20 +39,14 @@ class LocationController extends GetxController {
 
       //Descartar ubicaciones repetidas
       try {
-        // print(
-        //     "Entrooooo en el last ${_allPositions.lastOrNull?.latitude} y ${event.latitude}");
         if (_allPositions.lastOrNull?.latitude != event.latitude &&
             _allPositions.lastOrNull?.longitude != event.longitude) {
           _allPositions.add(UserLocation(
               latitude: event.latitude, longitude: event.longitude));
-          // print(
-          // "------------lat: ${event.latitude} long:${event.longitude}--------");
           if (_allPositions.length >= 3) calculateDistance();
         } else {
           print("son igualesssssssssss");
         }
-
-        // calculateAvgPace();
       } catch (e) {
         print("Erroor presentado es $e");
       }
@@ -130,9 +123,11 @@ class LocationController extends GetxController {
     _kCal.value += kCalService;
   }
 
-  // void calculateAvgPace() {
-  //   double avgP = service.calculateAvgPace(_d, distance)
-  // }
+  void calculateAvgPace(Duration duration) {
+    if (_liveUpdate.value) {
+      _avgPace.value = service.calculateAvgPace(duration, _distance.value);
+    }
+  }
 
   void resetAll() {
     _allPositions.clear();
