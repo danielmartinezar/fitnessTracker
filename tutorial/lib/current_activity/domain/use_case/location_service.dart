@@ -62,8 +62,8 @@ class LocatorService {
     return distanceBetweenPoints;
   }
 
-  double calculateAvgPace(double duration, double distance) {
-    final avgPace = duration / distance;
+  double calculateAvgPace(Duration duration, double distance) {
+    final avgPace = duration.inMinutes / distance;
     return avgPace;
   }
 
