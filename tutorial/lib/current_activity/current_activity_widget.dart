@@ -26,31 +26,46 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
   StopWatchTimer stopWatchTimer = StopWatchTimer();
   late CurrentActivityModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final _unfocusNode = FocusNode();
 
+  final _unfocusNode = FocusNode();
+  LocationController locationController = Get.put(LocationController());
+  ActividadesController activityController = Get.put(ActividadesController());
+  late Timer _timer;
+  String _displayTime = '';
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => CurrentActivityModel());
+    locationController.suscribeLocationUpdates();
+    stopWatchTimer.onStartTimer();
+    _startTimer();
   }
 
   @override
   void dispose() {
     stopWatchTimer.dispose();
+    locationController.dispose();
     _model.dispose();
-
+    activityController.dispose();
     _unfocusNode.dispose();
     super.dispose();
   }
 
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(minutes: 1), (timer) {
+      print('corriendooooooo funcion');
+      locationController.calculateAvgPace(
+        locationController.convertDuration(_displayTime),
+      );
+    });
+  }
+
+  void _stopTimer() {
+    _timer.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
-    LocationController locationController = Get.put(LocationController());
-    ActividadesController activityController = Get.put(ActividadesController());
-    locationController.suscribeLocationUpdates();
-    stopWatchTimer.onStartTimer();
-    var _displayTime;
-
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -113,12 +128,6 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                                 _displayTime = StopWatchTimer.getDisplayTime(
                                     value!,
                                     hours: true);
-                                Timer.periodic(Duration(minutes: 1), (arg) {
-                                  print("corriendooooooo funcion");
-                                  locationController.calculateAvgPace(
-                                      locationController
-                                          .convertDuration(_displayTime));
-                                });
 
                                 return Text(
                                   _displayTime,
@@ -288,7 +297,7 @@ class _CurrentActivityWidgetState extends State<CurrentActivityWidget> {
                               puntos: locationController.allPositions);
                           locationController.resetAll();
                           locationController.unSuscribeLocationUpdates();
-
+                          _stopTimer();
                           await Navigator.push(
                             context,
                             MaterialPageRoute(

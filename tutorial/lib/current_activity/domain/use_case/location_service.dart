@@ -63,14 +63,19 @@ class LocatorService {
   }
 
   double calculateAvgPace(Duration duration, double distance) {
-    final avgPace = duration.inMinutes / distance;
-    return avgPace;
+    if (distance > 0) {
+      final durationMins = duration.inSeconds / 60;
+      final avgPace = durationMins / distance;
+      return avgPace;
+    }
+    print("distanciaaa es 0");
+    return 0;
   }
 
   double calculateKCal(double weight, double distance) {
-    final double FACTOR = 0.75;
+    final double factor = 0.75;
     // Convertir segundos a horas
-    double caloriesPerKilometer = weight * FACTOR;
+    double caloriesPerKilometer = weight * factor;
     double caloriesBurned = caloriesPerKilometer * distance;
     return caloriesBurned;
   }

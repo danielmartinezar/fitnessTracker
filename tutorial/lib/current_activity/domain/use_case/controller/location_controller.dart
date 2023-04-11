@@ -37,13 +37,14 @@ class LocationController extends GetxController {
     _positionStreamSubscription = service.stream.listen((event) {
       userLocation.value = event;
 
-      //Descartar ubicaciones repetidas
       try {
+        //Descartar ubicaciones repetidas
         if (_allPositions.lastOrNull?.latitude != event.latitude &&
             _allPositions.lastOrNull?.longitude != event.longitude) {
           _allPositions.add(UserLocation(
               latitude: event.latitude, longitude: event.longitude));
-          if (_allPositions.length >= 3) calculateDistance();
+          //calculamos la distancia siempre que haya minimo 2 puntos
+          if (_allPositions.length >= 2) calculateDistance();
         } else {
           print("son igualesssssssssss");
         }
@@ -126,6 +127,7 @@ class LocationController extends GetxController {
   void calculateAvgPace(Duration duration) {
     if (_liveUpdate.value) {
       _avgPace.value = service.calculateAvgPace(duration, _distance.value);
+      print("Avg pace value ${_avgPace.value}");
     }
   }
 
