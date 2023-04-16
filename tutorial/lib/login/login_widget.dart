@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial/home_page/home_page_widget.dart';
 import 'package:tutorial/login/login_controller.dart';
 import 'package:tutorial/signin/signin_controller.dart';
 import 'package:get/get.dart';
 
+
+import '../backend/data/login/Local_preference_login.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -18,6 +21,8 @@ import 'package:provider/provider.dart';
 import 'login_model.dart';
 export 'login_model.dart';
 
+
+
 class LoginWidget extends StatefulWidget {
   const LoginWidget({Key? key}) : super(key: key);
 
@@ -30,6 +35,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   
   final login_controller logincontroller = Get.put(login_controller());
   final signin_controller signincontroller = Get.put(signin_controller());
+  final prefs_controller prefscontroller = Get.put(prefs_controller());
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -37,6 +43,9 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   @override
   void initState() {
+  
+    
+
     super.initState();
     _model = createModel(context, () => LoginModel());
     
@@ -306,7 +315,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                             );
                           },
                         );
+
                         log("acceso concedido");
+                        prefscontroller.storeUserInfo(usr,pasw);
+
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -430,3 +442,5 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 }
+
+

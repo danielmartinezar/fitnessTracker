@@ -1,17 +1,44 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial/backend/data/login/Local_preference_login.dart';
+import 'package:tutorial/home_page/home_page_model.dart';
+import 'package:tutorial/login/login_model.dart';
 import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/internationalization.dart';
 import 'index.dart';
 
+bool isLogged = false; 
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initFirebase();
 
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var userInfo = prefs.getString("user");
+  log("hola primero: ${userInfo}");
+
+  await autolog();
+  log("hola segundo: ${isLogged}");
+
+  prefs.clear(); // linea que borra los preference, para poder iniciar sesion, se borra al reiniciar la app por 2 vez
+
   await FlutterFlowTheme.initialize();
 
   runApp(MyApp());
+}
+
+autolog() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool logged = prefs.getBool("storedUser") ?? false;
+    if (logged != false){ 
+        isLogged = logged;
+    }
+  return;
 }
 
 class MyApp extends StatefulWidget {
@@ -39,9 +66,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: LoginWidget(),
+      home : isLogged ? HomePageWidget() : LoginWidget(),
     );
-  }
+  } 
 }
 
 class NavBarPage extends StatefulWidget {
