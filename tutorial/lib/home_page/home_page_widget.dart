@@ -13,6 +13,8 @@ import 'package:tutorial/current_activity/current_activity_widget.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';
 import 'package:tutorial/activity_detail/activity_detail_widget.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 
 final ActividadesController _actividadesController = Get.find();
 
@@ -45,7 +47,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final actividadesController = Get.find<ActividadesController>(); // Obtiene el controlador
+    final actividadesController =
+        Get.find<ActividadesController>(); // Obtiene el controlador
     //log("inicio usuario $")
     return Scaffold(
       key: scaffoldKey,
@@ -163,18 +166,36 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   }
 
   Widget _buildActividadesList() {
-    return Obx(
-      () => ListView.builder(
-        itemCount: _actividadesController.actividades.length,
-        itemBuilder: (BuildContext context, int index) {
-          final actividad = _actividadesController.actividades[index];
-          return _buildActividadCard(context, actividad);
-        },
-      ),
+    return GetBuilder<ActividadesController>(
+      init: ActividadesController(),
+      builder: (controller) {
+        return ValueListenableBuilder(
+          valueListenable: controller.actividadesBox?.listenable() ??
+              ValueNotifier<Box<Actividad>>(Hive.box('actividades')),
+          builder: (BuildContext context, Box<Actividad> box, _) {
+            if (box.isEmpty) {
+              return Center(child: Text('No hay actividades.'));
+            }
+            return ListView.builder(
+              itemCount: box.length,
+              itemBuilder: (BuildContext context, int index) {
+                final actividad = box.getAt(index);
+                if (actividad != null) {
+                  return _buildActividadCard(context, actividad, index);
+                } else {
+                  return SizedBox
+                      .shrink(); // Devuelve un widget vacío en caso de que la actividad sea nula.
+                }
+              },
+            );
+          },
+        );
+      },
     );
   }
 
-  Widget _buildActividadCard(BuildContext context, Actividad actividad) {
+  Widget _buildActividadCard(
+      BuildContext context, Actividad actividad, int index) {
     return Align(
       alignment: AlignmentDirectional(0, 0),
       child: Padding(
@@ -255,7 +276,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       child: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
-                          _actividadesController.eliminarActividad(actividad);
+                          _actividadesController.eliminarActividad(index);
                         },
                       ),
                     ),

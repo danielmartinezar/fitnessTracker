@@ -1,48 +1,21 @@
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:tutorial/home_page/actividad.dart';
 import 'package:tutorial/current_activity/model/user_location.dart';
 
 class ActividadesController extends GetxController {
-  var actividades = <Actividad>[
-    Actividad(
-      tipo: 'Running',
-      cronometro: Duration(minutes: 45),
-      km: 5.0,
-      kcal: 400,
-      avgPace: 8.5,
-      estado: true,
-      fecha: DateTime(2023, 3, 5),
-      puntos: [
-        UserLocation(
-          latitude: 40.7128,
-          longitude: -74.0060,
-        ),
-        UserLocation(
-          latitude: 40.7129,
-          longitude: -74.0061,
-        ),
-      ],
-    ),
-    Actividad(
-      tipo: 'Cycling',
-      cronometro: Duration(hours: 1, minutes: 30),
-      km: 20.0,
-      kcal: 800,
-      avgPace: 8.2,
-      estado: false,
-      fecha: DateTime(2023, 3, 10),
-      puntos: [
-        UserLocation(
-          latitude: 40.7128,
-          longitude: -74.0060,
-        ),
-        UserLocation(
-          latitude: 40.7129,
-          longitude: -74.0061,
-        ),
-      ],
-    ),
-  ].obs;
+  // Crea una variable para la caja de Hive donde se almacenarán las actividades
+  Box<Actividad>? actividadesBox;
+
+  @override
+  void onInit() {
+    super.onInit();
+    abrirCaja();
+  }
+
+  Future<Box<Actividad>> abrirCaja() async {
+    return await Hive.openBox<Actividad>('actividades');
+  }
 
   void agregarActividad(
       {required String tipo,
@@ -53,7 +26,7 @@ class ActividadesController extends GetxController {
       required bool estado,
       required DateTime fecha,
       required List<UserLocation> puntos}) {
-    actividades.add(Actividad(
+    final actividad = Actividad(
         tipo: tipo,
         cronometro: cronometro,
         km: km,
@@ -61,17 +34,17 @@ class ActividadesController extends GetxController {
         avgPace: avgPace,
         estado: estado,
         fecha: fecha,
-        puntos: List.from(puntos)));
+        puntos: List.from(puntos));
+    actividadesBox?.add(actividad);
     puntos
         .map((e) => print("Puntos de actividad ${e.latitude} ${e.longitude}"));
   }
 
-  void eliminarActividad(Actividad actividad) {
-    actividades.removeWhere((a) => a == actividad);
-    actividades.refresh();
+  void eliminarActividad(int index) {
+    actividadesBox?.deleteAt(index);
   }
 
   void modificarActividad(int index, Actividad nuevaActividad) {
-    actividades[index] = nuevaActividad;
+    actividadesBox?.putAt(index, nuevaActividad);
   }
 }

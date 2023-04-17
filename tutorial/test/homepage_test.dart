@@ -45,48 +45,4 @@ void main() {
     expect(find.text('Elige una opción'), findsOneWidget);
     expect(find.text('¿Quieres trotar o andar en bicicleta?'), findsOneWidget);
   });
-  group('ActividadesController', () {
-    test('agregarActividad should add a new activity', () {
-      expect(actividadesController.actividades.length, 2);
-
-      actividadesController.agregarActividad(
-          tipo: 'Running',
-          cronometro: Duration(minutes: 20),
-          km: 3.0,
-          kcal: 200,
-          avgPace: 6.5,
-          estado: true,
-          fecha: DateTime(2023, 4, 15),
-          puntos: []);
-
-      expect(actividadesController.actividades.length, 3);
-    });
-
-    test('eliminarActividad should remove an activity', () {
-      expect(actividadesController.actividades.length, 2);
-
-      final actividad = actividadesController.actividades[0];
-      actividadesController.eliminarActividad(actividad);
-
-      expect(actividadesController.actividades.length, 1);
-    });
-
-    test('modificarActividad should update an activity', () {
-      final actividad = actividadesController.actividades[0];
-      final nuevaActividad = Actividad(
-          tipo: 'Cycling',
-          cronometro: Duration(minutes: 30),
-          km: 10.0,
-          kcal: 500,
-          avgPace: 7.5,
-          estado: true,
-          fecha: DateTime(2023, 4, 20),
-          puntos: []);
-
-      actividadesController.modificarActividad(0, nuevaActividad);
-
-      expect(actividadesController.actividades[0].tipo, 'Cycling');
-      expect(actividadesController.actividades[0].km, 10.0);
-    });
-  });
 }

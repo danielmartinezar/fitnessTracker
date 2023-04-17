@@ -10,14 +10,19 @@ import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/internationalization.dart';
 import 'index.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:tutorial/home_page/actividad.dart';
 
-bool isLogged = false; 
-
+bool isLogged = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initFirebase();
-
+  final appDocumentDir = await getApplicationDocumentsDirectory();
+  await Hive.initFlutter(appDocumentDir.path);
+  Hive.registerAdapter(ActividadAdapter());
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var userInfo = prefs.getString("user");
   log("hola primero: ${userInfo}");
@@ -25,7 +30,8 @@ void main() async {
   await autolog();
   log("hola segundo: ${isLogged}");
 
-  prefs.clear(); // linea que borra los preference, para poder iniciar sesion, se borra al reiniciar la app por 2 vez
+  prefs
+      .clear(); // linea que borra los preference, para poder iniciar sesion, se borra al reiniciar la app por 2 vez
 
   await FlutterFlowTheme.initialize();
 
@@ -33,11 +39,11 @@ void main() async {
 }
 
 autolog() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool logged = prefs.getBool("storedUser") ?? false;
-    if (logged != false){ 
-        isLogged = logged;
-    }
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final bool logged = prefs.getBool("storedUser") ?? false;
+  if (logged != false) {
+    isLogged = logged;
+  }
   return;
 }
 
@@ -66,9 +72,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home : isLogged ? HomePageWidget() : LoginWidget(),
+      home: isLogged ? HomePageWidget() : LoginWidget(),
     );
-  } 
+  }
 }
 
 class NavBarPage extends StatefulWidget {
